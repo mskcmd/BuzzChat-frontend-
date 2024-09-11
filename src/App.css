@@ -1,0 +1,20 @@
+.App {
+    min-height: 100vh;
+    display: flex;
+    background-image: url("https://images.stockcake.com/public/e/5/4/e547a578-341b-425f-909d-f209d9639bbc_large/messaging-on-smartphone-stockcake.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, 0.281);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
