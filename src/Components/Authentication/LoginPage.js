@@ -26,22 +26,34 @@ function LoginPage() {
             "Content-Type": "application/json",
           },
         };
-
+  
+        // Define baseURL and endpoint
+        const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+        const endpoint = "/api/user/login";
+        const url = `${baseURL}${endpoint}`;
+  
+        // Make the POST request using the constructed URL
         const { data } = await axios.post(
-          "/api/user/login",
+          url,
           { email, password },
           config
-        );        
+        );
+  
+        // Store user info in localStorage
         localStorage.setItem("userinfo", JSON.stringify(data));
+  
+        // Display success toast
         toast({
           title: "Login Successful",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
-
+  
+        // Navigate to the chat page
         navigate("/chat");
       } else {
+        // Display error toast for missing email or password
         toast({
           title: "Invalid email or password",
           status: "error",
@@ -51,6 +63,8 @@ function LoginPage() {
       }
     } catch (error) {
       console.error("Error during login:", error);
+  
+      // Display error toast in case of login failure
       toast({
         title: "Login Failed",
         description: "An error occurred during login.",
@@ -62,6 +76,7 @@ function LoginPage() {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <Box p={4} borderWidth={1} borderRadius={8} boxShadow="lg" w="100%">

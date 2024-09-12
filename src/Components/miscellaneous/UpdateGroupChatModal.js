@@ -44,7 +44,12 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${query}`, config);
+
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = `/api/user?search=${query}`;
+      const url = `${baseURL}${endpoint}`;
+
+      const { data } = await axios.get(url, config);
       setSearchResult(data);
     } catch (error) {
       toast({
@@ -70,8 +75,12 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/chat/rename";
+      const url = `${baseURL}${endpoint}`;
+
       const { data } = await axios.put(
-        `/api/chat/rename`,
+        url,
         { chatId: selectedChat._id, chatName: groupChatName },
         config
       );
@@ -124,8 +133,12 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/chat/groupadd";
+      const url = `${baseURL}${endpoint}`;
+
       const { data } = await axios.put(
-        `/api/chat/groupadd`,
+        url,
         { chatId: selectedChat._id, userId: userToAdd._id },
         config
       );
@@ -169,8 +182,12 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       };
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/chat/groupremove";
+      const url = `${baseURL}${endpoint}`;
+
       const { data } = await axios.put(
-        `/api/chat/groupremove`,
+        url,
         { chatId: selectedChat._id, userId: userToRemove._id },
         config
       );

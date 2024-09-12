@@ -53,6 +53,8 @@ function SignupPage() {
     }
   };
 
+ 
+
   const handleSignup = async () => {
     if (password !== confirmPassword) {
       toast({
@@ -63,27 +65,30 @@ function SignupPage() {
       });
       return;
     }
-
+  
     setIsLoading(true);
     try {
       let imageUrl = "";
       if (profileImage) {
         imageUrl = await uploadImage(profileImage); // Upload image and get URL
       }
-      console.log("url", imageUrl);
-
+      console.log("Image URL:", imageUrl);
+  
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/user/register";
+      const url = `${baseURL}${endpoint}`;
+      
+      // Log the URL to verify it is correct
+      console.log("Request URL:", url);
+  
       const config = {
         headers: {
           "Content-Type": "application/json",
         },
       };
-
-      const { data } = await axios.post(
-        "/api/user/register",
-        { name, email, password,imageUrl },
-        config
-      );
-
+  
+      const { data } = await axios.post(url, { name, email, password, imageUrl }, config);
+  
       localStorage.setItem("userinfo", JSON.stringify(data));
       toast({
         title: "Signup Successful",
@@ -91,10 +96,10 @@ function SignupPage() {
         duration: 3000,
         isClosable: true,
       });
-
+  
       navigate("/chat");
     } catch (error) {
-      console.log(error);
+      console.error("Signup error:", error); // Log error details
       toast({
         title: "Signup Failed",
         description: "An error occurred during signup.",
@@ -106,7 +111,7 @@ function SignupPage() {
       setIsLoading(false);
     }
   };
-
+  
   const handleProfileImageChange = (event) => {
     const file = event.target.files[0];
     if (!file) {

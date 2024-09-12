@@ -48,7 +48,12 @@ function GroupChatModel({ children }) {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${query}`, config);
+
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = `/api/user?search=${query}`;
+      const url = `${baseURL}${endpoint}`;
+
+      const { data } = await axios.get(url, config);
       setLoading(false);
       if (data) setSearchResults(data);
     } catch (error) {
@@ -101,8 +106,12 @@ function GroupChatModel({ children }) {
         },
       };
 
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/chat/group";
+      const url = `${baseURL}${endpoint}`;
+
       const { data } = await axios.post(
-        `/api/chat/group`,
+        url,
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

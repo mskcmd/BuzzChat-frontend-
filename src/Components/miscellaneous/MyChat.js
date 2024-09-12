@@ -20,7 +20,11 @@ function MyChat({ fetchAgain }) {
         },
       };
 
-      const { data } = await axios.get("/api/chat", config);
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/chat";
+      const url = `${baseURL}${endpoint}`
+
+      const { data } = await axios.get(url, config);
       setChats(data);
     } catch (error) {
       toast({

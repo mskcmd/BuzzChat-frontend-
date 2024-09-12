@@ -66,7 +66,12 @@ function SideDrawer() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.get(`/api/user?search=${search}`, config);
+
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = `/api/user?search=${search}`;
+      const url = `${baseURL}${endpoint}`
+
+      const { data } = await axios.get(url, config);
       setLoading(false);
       setSearchResult(data);
     } catch (error) {
@@ -81,6 +86,7 @@ function SideDrawer() {
       setLoading(false);
     }
   };
+
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
@@ -97,7 +103,12 @@ function SideDrawer() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(`/api/chat`, { userId }, config);
+
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = "/api/chat";
+      const url = `${baseURL}${endpoint}`;
+
+      const { data } = await axios.post(url, { userId }, config);
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);

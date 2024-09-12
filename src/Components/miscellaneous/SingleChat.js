@@ -20,7 +20,7 @@ import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../../animations/typing.json";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = process.env.REACT_APP_BACKEND_ENDPOINT;
 var socket, selectedChatCompare;
 
 function SingleChat({ fetchAgain, setFetchAgain }) {
@@ -64,16 +64,23 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
 
       setLoading(true);
 
-      const { data } = await axios.get(
-        `/api/message/${selectedChat._id}`,
-        config
-      );
+      // Define baseURL and endpoint
+      const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+      const endpoint = `/api/message/${selectedChat._id}`;
+      const url = `${baseURL}${endpoint}`;
+
+      // Make the GET request using the constructed URL
+      const { data } = await axios.get(url, config);
 
       setMessages(data);
       setLoading(false);
+
+      // Join the selected chat via socket
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
       console.error("Failed to load messages", error);
+
+      // Show error toast
       toast({
         title: "Error Occurred!",
         description: "Failed to load the messages",
@@ -82,6 +89,7 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
         isClosable: true,
         position: "bottom-left",
       });
+      setLoading(false);
     }
   };
 
@@ -96,8 +104,12 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
             Authorization: `Bearer ${user.token}`,
           },
         };
+        const baseURL = process.env.REACT_APP_BACKEND_ENDPOINT;
+        const endpoint = "/api/message";
+        const url = `${baseURL}${endpoint}`;
+
         const { data } = await axios.post(
-          "/api/message",
+          url,
           {
             content: newMessage,
             chatId: selectedChat._id,
@@ -192,7 +204,6 @@ function SingleChat({ fetchAgain, setFetchAgain }) {
           {selectedChat.isGroupChat ? (
             <Avatar icon={<Users />} bg="teal.500" mr={2} />
           ) : (
-            
             <Avatar icon={<User />} bg="blue.500" mr={2} />
           )}
           <Text fontSize="xl" fontWeight="bold">
